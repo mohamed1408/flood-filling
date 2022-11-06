@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flood Filling -Google INterview Questions</title>
+</head>
+
+<body>
+    <style>
+        .container {
+            margin: auto;
+        }
+
+        button {
+            border: 1px solid;
+        }
+
+        button.land {
+            background: white;
+        }
+
+        button.water {
+            background: lightblue;
+        }
+    </style>
+
+
+    <div class="container">
+        <div id="box">
+
+        </div>
+    </div>
+
+    <script>
+        let arraybp = ''
+        let array = []
+        let arrayDimension = [5, 5]
+        function m(min, max) { // min and max included 
+            return Math.floor(Math.random() * (max - min + 1) + min)
+        }
+        const fill = (i, j) => {
+            console.log(i, j)
+            if (i >= 0 && i < array.length && j >= 0 && j < array[0].length) {
+                if (array[i][j] == 1) {
+                    array[i][j] = 2
+                    fill(i - 1, j)
+                    fill(i + 1, j)
+                    fill(i, j - 1)
+                    fill(i, j + 1)
+                }
+            }
+        }
+        const createArray = () => {
+            // '-'.repeat(arrayDimension[0]).split('').forEach((r, ri) => {
+            //     array[ri] = []
+            //     '-'.repeat(arrayDimension[1]).split('').forEach((c, ci) => {
+            //         array[ri][ci] = m(0, 1)
+            //     })
+            // })
+            array = [
+                [0,0,0,0,0],
+                [0,1,1,1,0],
+                [0,1,0,1,0],
+                [0,1,1,1,0],
+                [0,0,0,0,0]
+            ]
+            arraybp = JSON.stringify(array)
+        }
+        let box = document.getElementById("box")
+        const createLand = () => {
+            box.innerHTML = null
+            array.forEach((arr, index) => {
+                let row = document.createElement('div')
+                row.className = "row"
+                arr.forEach((a, i) => {
+                    let land = document.createElement('button')
+                    land.className = (a > 1) ? 'water' : 'land'
+                    land.innerText = a
+                    land.onclick = () => {
+                        fill(index, i)
+                        createLand()
+                    }
+                    row.appendChild(land)
+                })
+                box.appendChild(row)
+            })
+            console.log(arraybp)
+            array = JSON.parse(arraybp)
+        }
+        createArray()
+        createLand()
+    </script>
+</body>
+
+</html>
